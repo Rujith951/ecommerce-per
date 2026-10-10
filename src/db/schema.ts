@@ -7,7 +7,16 @@ import {
 	text,
 	numeric,
 	unique,
+	pgEnum,
 } from "drizzle-orm/pg-core";
+
+export const userRoleEnum = pgEnum("role", ["admin", "user", "seller"]);
+export const orderStatusEnum = pgEnum("status", [
+	"pending",
+	"shipped",
+	"delivered",
+	"cancelled",
+]);
 
 // // A foreign key connects two tables at the database level. For example,
 // // products.categoryId must point to an existing categories.id.
@@ -201,7 +210,9 @@ export const usersTable = pgTable("users", {
 
 	email: varchar({ length: 255 }).notNull().unique(),
 
-	role: varchar({ length: 10 }).notNull(),
+	password: varchar({ length: 255 }).notNull(),
+
+	role: varchar({ length: 10 }).notNull().default("user"),
 
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -218,6 +229,17 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 */
+
+export const refreshTokensTable = pgTable("refresh_tokens", {
+	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	userId: integer("user_id")
+		.notNull()
+		.references(() => usersTable.id),
+	token: text().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	expiresAt: timestamp("expired_at").notNull(),
+	revokedAt: timestamp("revoked_at"),
+});
 
 /*
 ===========================================================
@@ -566,7 +588,7 @@ export const ordersTable = pgTable("orders", {
 		*/
 		.references(() => usersTable.id),
 
-	status: varchar({ length: 30 }).notNull().default("PLACED"),
+	status: varchar({ length: 30 }).notNull().default("pending"),
 
 	totalAmount: numeric("total_amount", {
 		precision: 10,

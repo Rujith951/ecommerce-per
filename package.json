@@ -3,20 +3,39 @@
 	"type": "module",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "src/index.ts",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "nodemon --watch src --watch app.ts --ext ts --exec tsx src/index.ts",
+		"migrate": "drizzle-kit migrate",
+		"generate": "drizzle-kit generate",
+		"push": "drizzle-kit push",
+		"studio": "drizzle-kit studio"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"packageManager": "pnpm@10.14.0",
 	"devDependencies": {
+		"@types/bcrypt": "^6.0.0",
+		"@types/cookie-parser": "^1.4.10",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.6",
+		"@types/jsonwebtoken": "^9.0.10",
+		"@types/node": "^26.6.3",
 		"@types/pg": "^8.23.1",
-		"dotenv": "^18.0.0",
+		"bcrypt": "^6.0.0",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.6",
 		"drizzle-kit": "1.0.0-rc.4",
 		"drizzle-orm": "1.0.0-rc.4",
 		"pg": "^8.23.0",
-		"tsx": "^4.23.13"
+		"tsx": "^4.23.13",
+		"typescript": "^7.0.2"
+	},
+	"dependencies": {
+		"dotenv": "^18.0.0",
+		"express": "^5.2.1",
+		"jsonwebtoken": "^9.0.3",
+		"nodemon": "^3.1.14"
 	}
 }
